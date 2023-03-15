@@ -25,7 +25,8 @@ public class UserController {
             String errror = bindingResult.getFieldError().getDefaultMessage();
             return ResponseEntity.badRequest().body(new GlobalAPIResponse(false, errror, null));
         } else {
-            return ResponseEntity.ok(new GlobalAPIResponse(true, "user is add successfully", userService.create(userDto)));
+            userService.create(userDto);
+            return ResponseEntity.ok(new GlobalAPIResponse(true, "user is add successfully",null));
         }
     }
     @PostMapping("/image")

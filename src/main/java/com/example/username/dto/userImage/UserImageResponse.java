@@ -27,14 +27,13 @@ public class UserImageResponse {
     private String imagePath;
 
     private String originalFileName;
-
-
+    private Short parentId;
 
     public  UserImageResponse(UserImages userImages)
     {
         this.id=userImages.getId();
 
-        this.userId=userImages.getUser().getUId();
+        this.userId=userImages.getUser().getId();
         this.userFullNameEnglish=userImages.getUser().getUserFullNameEnglish();
         this.userFullNameNepali=userImages.getUser().getUserFullNameNepali();
         this.userName=userImages.getUser().getUserName();

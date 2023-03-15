@@ -24,7 +24,7 @@ public class UserRoleResponse {
     {
         this.id=userRole.getId();
 
-        this.userId=userRole.getUser().getUId();
+        this.userId=userRole.getUser().getId();
         this.userFullNameEnglish=userRole.getUser().getUserFullNameEnglish();
         this.userFullNameNepali=userRole.getUser().getUserFullNameNepali();
         this.userName=userRole.getUser().getUserName();

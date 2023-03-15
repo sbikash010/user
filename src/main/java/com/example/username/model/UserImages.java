@@ -19,7 +19,7 @@ public class UserImages {
     private Short id;
 
     @ManyToOne(fetch = FetchType.LAZY, targetEntity = User.class)
-    @JoinColumn(name = "user_id", foreignKey = @ForeignKey(name = "fk_user_image_user"))
+    @JoinColumn(name = "userimage_id", foreignKey = @ForeignKey(name = "fk_user_image_user"))
     private User user;
 
     @Column(name = "order_no")
@@ -40,4 +40,14 @@ public class UserImages {
     @Column(name = "size")
     @Min(value = 1)
     private Short maxImageSize;
+
+//    @ManyToOne(fetch = FetchType.LAZY)
+//    @JoinColumn(
+//            name = "parent_id",
+//            referencedColumnName = "id",
+//            foreignKey = @ForeignKey(
+//                    name = "fk_user_images_parent_id"
+//            )
+//    )
+//    private UserImages parent;
 }

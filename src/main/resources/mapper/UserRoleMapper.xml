@@ -1,0 +1,23 @@
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.username.mapper.UserRoleMapper">
+    <resultMap id="userRole" type="com.example.username.dto.user.ResponseUser" autoMapping="true">
+        <collection property="roleUserDtoList" ofType="com.example.username.dto.user.RoleUserDto" autoMapping="true"
+                    columnPrefix="role_">
+            <id column="id" property="id"/>
+        </collection>
+    </resultMap>
+    <select id="findAll" resultMap="userRole">
+        select u.user_email             as "userEmail",
+               u.user_full_name_english as "userFullNameEnglish",
+               u.user_full_name_nepali  as "userFullNameNepali",
+               u.user_name              as "userName",
+               u.user_phone             as "userPhone",
+               r.id                     as "role_roleId",
+               r.role_name_english      as "role_roleNameEnglish",
+               r.role_name_nepali       as "role_roleNameNepali",
+               r.is_active              as "role_isActive"
+
+        from users u
+                 inner join roles r on r.id = u.user_role_id
+    </select>
+</mapper>

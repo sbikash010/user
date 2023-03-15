@@ -10,6 +10,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.UUID;
 
 @Component
@@ -17,38 +19,50 @@ import java.util.UUID;
 public class FIleStorageUtils {
     public String storeFile(UserImageRequest userImageRequest) {
         MultipartFile multipartFile = userImageRequest.getMultipartFile();
-        if (validateImageSize(multipartFile)) {
-            String fileDir = System.getProperty("user.dir") + File.separator + "image";
+        Long size = multipartFile.getSize();
+        try {
+            if (multipartFile == null)
+                throw new RuntimeException(("file Not Found!!"));
+
+            if (validateImageSize(multipartFile)) {
+                String fileDir = System.getProperty("user.dir") + File.separator + "image";
 
 
-            File fileDirectory = new File(fileDir);
-            if (!fileDirectory.exists()) {
-                boolean mkdir = fileDirectory.mkdir();
-            } else {
-                log.info("file is already exist!!");
-            }
-            UUID uuid = UUID.randomUUID();
-            if (multipartFile.getOriginalFilename() != null) {
-                String filepath = fileDir + File.separator +uuid+"_" + multipartFile.getOriginalFilename();
-                fileDirectory = new File(filepath);
-                try (FileOutputStream outputStream = new FileOutputStream(fileDirectory)) {
-                    outputStream.write(multipartFile.getBytes());
-                    return filepath;
-                } catch (Exception e) {
-                    e.printStackTrace();
+                File fileDirectory = new File(fileDir);
+                if (!fileDirectory.exists()) {
+                    boolean mkdir = fileDirectory.mkdir();
+                } else {
+                    log.info("file is already exist!!");
                 }
-                return filepath;
+                UUID uuid = UUID.randomUUID();
+                if (multipartFile.getOriginalFilename() != null) {
+                    String filepath = fileDir + File.separator + uuid + "_" + multipartFile.getOriginalFilename();
+                    fileDirectory = new File(filepath);
+                    try (FileOutputStream outputStream = new FileOutputStream(fileDirectory)) {
+                        outputStream.write(multipartFile.getBytes());
+                        return filepath;
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                    return filepath;
+                } else {
+                    return null;
+                }
             } else {
-                return null;
+                throw new RuntimeException("image size is greater than 200 Mb");
             }
-        } else {
-            throw new RuntimeException("image size is greater than 200 Mb");
+
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new RuntimeException(e.getMessage());
         }
     }
 
     public boolean validateImageSize(MultipartFile multipartFile) {
-        return multipartFile.getSize() <= (200 * 1024 * 1024);
+        return multipartFile.getSize() <= (200000000);
     }
+
     public void getImage(String filePath, HttpServletResponse response) throws IOException {
         File file = new File(filePath);
         String fileName = filePath.replaceFirst("(?i)^.*filename=\"?([^\"]+)\"?.*$", "$1");
@@ -58,6 +72,17 @@ public class FIleStorageUtils {
             response.setContentLength((int) file.length());
             InputStream inputStream = new BufferedInputStream(new FileInputStream(file));
             FileCopyUtils.copy(inputStream, response.getOutputStream());
+        } else throw new RuntimeException("file.not.found");
+    }
+
+    public void getPDF(String filePath, HttpServletResponse response) throws IOException {
+        File file = new File(filePath);
+        if (file.exists()) {
+            response.setContentType("application/pdf");
+            OutputStream out = response.getOutputStream();
+            byte[] b = Files.readAllBytes(Paths.get(filePath));
+            out.write(b, 0, b.length);
+            out.close();
         } else throw new RuntimeException("file.not.found");
     }
 }

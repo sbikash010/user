@@ -1,6 +1,7 @@
 package com.example.username.service.impl;
 
 import com.example.username.dto.role.RoleDto;
+import com.example.username.mapper.UserMapper;
 import com.example.username.model.Role;
 import com.example.username.repo.RoleRepo;
 import com.example.username.service.RoleService;
@@ -15,6 +16,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class RoleServiceImpl implements RoleService {
     private final RoleRepo roleRepo;
+    private  final UserMapper userMapper;
 
     @Override
     public RoleDto create(RoleDto userDto) {
@@ -41,13 +43,21 @@ public class RoleServiceImpl implements RoleService {
         }
     }
 
+//    @Override
+//    public RoleDto findById(Short id) {
+//        Role role = roleRepo.findById(id).orElseThrow(
+//                () -> new RuntimeException("user is not found !!!")
+//        );
+//        return new RoleDto(role);
+//    }
+//
+
     @Override
     public RoleDto findById(Short id) {
-        Role role = roleRepo.findById(id).orElseThrow(
-                () -> new RuntimeException("user is not found !!!")
-        );
-        return new RoleDto(role);
+
+        return this.userMapper.findById(id);
     }
+
 
     @Override
     public List<RoleDto> findALl() {

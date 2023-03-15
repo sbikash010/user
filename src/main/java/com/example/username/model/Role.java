@@ -3,10 +3,9 @@ package com.example.username.model;
 import lombok.*;
 
 import javax.persistence.*;
-import java.util.Set;
 
 @Entity
-@Table(name = "role")
+@Table(name = "roles")
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
@@ -15,7 +14,7 @@ import java.util.Set;
 public class Role {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "r_id")
+    @Column(name = "id")
     private Short id;
 
 
@@ -26,7 +25,5 @@ public class Role {
     @Column(name="is_active")
     private Boolean isActive=true;
 
-    @ManyToMany(mappedBy = "roles",fetch = FetchType.LAZY)
-    private Set<User> users;
 
 }

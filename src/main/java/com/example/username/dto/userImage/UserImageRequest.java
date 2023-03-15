@@ -32,5 +32,7 @@ public class UserImageRequest {
     @NotNull(message = FieldErrorConstants.NOT_NULL)
     private MultipartFile multipartFile;
 
+//    private short parentId;
+
 
 }
